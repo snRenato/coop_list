@@ -1,47 +1,44 @@
 class ItemsController < ApplicationController
     # add the list relationship
-    before_action :set_list, only: [:index, :create]
-    def index
-        @items = @list.items
-        render json: @items
-    end
+    before_action :set_list
 
-    def new
-        @item = Item.new
-    end
+  def new
+    @item = @list.items.new
+  end
 
-    def show
-        @item = Item.find(params[:id])
-        render json: @item
+  def create
+    @item = @list.items.new(item_params)
+    if @item.save
+      redirect_to list_path(@list), notice: "Item criado!"
+    else
+      render :new
     end
+  end
 
-    def create
-        @item = Item.new(item_params)
-        if @item.save
-            render json: @item, status: :created
-        else
-            render json: @item.errors, status: :unprocessable_entity
-        end
+  def show
+    @item = @list.items.find(params[:id])
+  end
+
+  def edit
+    @item = @list.items.find(params[:id])
+  end
+  
+  def update
+    @item = @list.items.find(params[:id])
+    if @item.update(item_params)
+      redirect_to list_path(@list), notice: "Item atualizado!"
+    else
+      render :edit
     end
+  end
 
-    def update
-        @item = Item.find(params[:id])
-        if @item.update(item_params)
-            render json: @item
-        else
-            render json: @item.errors, status: :unprocessable_entity
-        end
-    end
+  private
 
-    def destroy
-        @item = Item.find(params[:id])
-        @item.destroy
-        head :no_content
-    end
+  def set_list
+    @list = List.find(params[:list_id])
+  end
 
-    private
-
-    def item_params
-        params.require(:item).permit(:name, :description, :price)
-    end
+  def item_params
+    params.require(:item).permit(:name, :status)
+  end
 end
