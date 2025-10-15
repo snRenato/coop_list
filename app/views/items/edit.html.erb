@@ -1,4 +1,6 @@
-<%= form_with model: [@list, Item.new] do |form| %>
+<h1>Edit Item</h1>
+
+<%= form_with(model: [@list, @item], local: true) do |form| %>
     <% if @item.errors.any? %>
         <div id="error_explanation">
             <h2><%= pluralize(@item.errors.count, "error") %> prohibited this item from being saved:</h2>
@@ -15,13 +17,7 @@
         <%= form.text_field :name %>
     </div>
 
-    <div class="field">
-        <%= form.label :status %>
-        <%= form.text_area :status %>
-    </div>
-
-
     <div class="actions">
-        <%= form.submit "Create Item" %>
+        <%= form.submit "Update Item" %>
     </div>
 <% end %>

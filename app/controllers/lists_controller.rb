@@ -2,7 +2,6 @@ class ListsController < ApplicationController
     # generate the standard CRUD actions
     def index
         @lists = List.all
-        render json: @lists
     end
 
     def new
@@ -11,7 +10,6 @@ class ListsController < ApplicationController
 
     def show
         @list = List.find(params[:id])
-        render json: @list
     end
 
     def create
@@ -41,6 +39,6 @@ class ListsController < ApplicationController
     private
     
     def list_params
-        params.require(:list).permit(:name, :description)
+        params.require(:list).permit(:title, :category )
     end
 end
