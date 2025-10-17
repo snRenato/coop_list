@@ -1,0 +1,5 @@
+<turbo-frame id="item_status_<%= item.id %>">
+  <%= form_with model: item, url: toggle_list_item_path(item.list, item), method: :patch, local: false do |f| %>
+    <%= f.check_box :status, checked: item.status, onchange: "this.form.submit();" %>
+  <% end %>
+</turbo-frame>

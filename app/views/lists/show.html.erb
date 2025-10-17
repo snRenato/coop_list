@@ -1,25 +1,12 @@
-<h1>List Details</h1>
-
-<p>
-    <strong>Name:</strong>
-    <%= @list.title %>
-</p>
-
-<p>
-    <strong>category:</strong>
-    <%= @list.category %>
-</p>
-
-<% if @list.items.any? %>
-    <h2>Items</h2>
-    <ul>
-        <% @list.items.each do |item| %>
-            <li><%= link_to item.name, [@list, item] %></li>
+<ul>
+  <% @list.items.each do |item| %>
+    <li id="item_<%= item.id %>">
+      <%= turbo_frame_tag "item_#{item.id}" do %>
+        <%= form_with model: item, url: toggle_list_item_path(@list, item), method: :patch, data: { turbo_frame: "item_#{item.id}" } do |f| %>
+          <%= f.check_box :status, checked: item.status, onchange: "this.form.submit();" %>
+          <%= item.name %>
         <% end %>
-    </ul>
-<% else %>
-    <p>No items in this list.</p>
-<% end %>
-
-<%= link_to 'Edit', edit_list_path(@list) %> |
-<%= link_to 'Back', lists_path %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

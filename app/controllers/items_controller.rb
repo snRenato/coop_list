@@ -1,6 +1,7 @@
 class ItemsController < ApplicationController
     # add the list relationship
     before_action :set_list
+    before_action :set_item, only: [ :update ]
 
   def new
     @item = @list.items.new
@@ -22,20 +23,36 @@ class ItemsController < ApplicationController
   def edit
     @item = @list.items.find(params[:id])
   end
-  
+
+
   def update
-    @item = @list.items.find(params[:id])
-    if @item.update(item_params)
-      redirect_to list_path(@list), notice: "Item atualizado!"
-    else
-      render :edit
+    @item.update(item_params)
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to @list }
+    end
+  end
+
+  def toggle
+    @item = Item.find(params[:id])
+    @item.update(status: !@item.status)
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to @item.list } # fallback
     end
   end
 
   private
 
+
+
   def set_list
     @list = List.find(params[:list_id])
+  end
+
+  def set_item
+    @item = @list.items.find(params[:id])
   end
 
   def item_params
