@@ -1,0 +1,6 @@
+<%= turbo_stream.replace "item_#{@item.id}" do %>
+  <%= form_with model: @item, url: toggle_list_item_path(@item.list, @item), method: :patch, data: { turbo_frame: "item_#{@item.id}" } do |f| %>
+    <%= f.check_box :status, checked: @item.status, onchange: "this.form.submit();" %>
+    <%= @item.name %>
+  <% end %>
+<% end %>
