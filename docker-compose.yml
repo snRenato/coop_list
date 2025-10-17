@@ -3,28 +3,44 @@ services:
   db:
     image: postgres:14-alpine
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      # Adicionado valores padrão para robustez
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-coop_list_development}
     volumes:
       - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-coop_list_development}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   web:
-    build: .
+    build:
+      context: .
+      args:
+        # Adicionado valores padrão para o processo de build
+        POSTGRES_HOST: ${POSTGRES_HOST:-db}
+        POSTGRES_USER: ${POSTGRES_USER:-postgres}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+        POSTGRES_DB: ${POSTGRES_DB:-coop_list_development}
+        RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     ports:
       - "3000:3000"
     environment:
       RAILS_ENV: development
-      POSTGRES_HOST: ${POSTGRES_HOST}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: coop_list_development
+      POSTGRES_HOST: db
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-coop_list_development}
       RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
     volumes:
-     - .:/coop_list
+      - .:/coop_list
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+
 volumes:
   db_data: {}
-  
+
