@@ -1,0 +1,7 @@
+<%= turbo_frame_tag "items_list" do %>
+  <ul class="space-y-1">
+    <% items.each do |item| %>
+      <%= render partial: "items/item", locals: { item: item } %>
+    <% end %>
+  </ul>
+<% end %>
