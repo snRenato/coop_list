@@ -1,18 +1,22 @@
 class ItemsController < ApplicationController
-    # add the list relationship
-    before_action :set_list
-    before_action :set_item, only: [ :update ]
+   before_action :authenticate_user!
+  before_action :set_list
+  before_action :set_item, only: [ :update, :destroy ]
 
   def new
-    @item = @list.items.new
+    @item = Item.new
   end
 
   def create
-    @item = @list.items.new(item_params)
+    authorize_manage_items!
+    @item = @list.items.build(item_params)
     if @item.save
-      redirect_to list_path(@list), notice: "Item criado!"
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to @list, notice: "Item criado!" }
+      end
     else
-      render :new
+      redirect_to @list, alert: @item.errors.full_messages.to_sentence
     end
   end
 
@@ -26,10 +30,14 @@ class ItemsController < ApplicationController
 
 
   def update
-    @item.update(item_params)
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to @list }
+    authorize_manage_items!
+    if @item.update(item_params)
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to @list, notice: "Item atualizado!" }
+      end
+    else
+      redirect_to @list, alert: @item.errors.full_messages.to_sentence
     end
   end
 
@@ -45,8 +53,6 @@ class ItemsController < ApplicationController
 
   private
 
-
-
   def set_list
     @list = List.find(params[:list_id])
   end
@@ -57,5 +63,12 @@ class ItemsController < ApplicationController
 
   def item_params
     params.require(:item).permit(:name, :status)
+  end
+
+  def authorize_manage_items!
+    member = @list.members.find_by(user: current_user)
+    unless member&.can_manage_items? || @list.owner == current_user
+      redirect_to @list, alert: "Você não pode gerenciar items"
+    end
   end
 end
