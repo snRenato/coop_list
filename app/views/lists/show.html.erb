@@ -1,12 +1,19 @@
-<ul>
-  <% @list.items.each do |item| %>
-    <li id="item_<%= item.id %>">
-      <%= turbo_frame_tag "item_#{item.id}" do %>
-        <%= form_with model: item, url: toggle_list_item_path(@list, item), method: :patch, data: { turbo_frame: "item_#{item.id}" } do |f| %>
-          <%= f.check_box :status, checked: item.status, onchange: "this.form.submit();" %>
-          <%= item.name %>
-        <% end %>
-      <% end %>
-    </li>
+<h2><%= @list.title %></h2>
+
+<h3>Membros</h3>
+<%= turbo_frame_tag "members_list" do %>
+  <ul>
+    <% @list.members.each do |member| %>
+      <li><%= member.user.email %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<h3>Adicionar membro</h3>
+<%= turbo_frame_tag "new_member" do %>
+  <%= form_with url: list_members_path(@list), method: :post, data: { turbo_frame: "members_list" } do |f| %>
+    <%= f.label :email, "E-mail do membro" %>
+    <%= f.text_field :email, placeholder: "Digite o e-mail do usuário", required: true %>
+    <%= f.submit "Adicionar Membro" %>
   <% end %>
-</ul>
+<% end %>

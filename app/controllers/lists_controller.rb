@@ -1,7 +1,10 @@
 class ListsController < ApplicationController
-    # generate the standard CRUD actions
+    before_action :authenticate_user!
+
     def index
-        @lists = List.all
+        @lists = List.select do |m|
+            m.members.exists?(user_id: current_user.id) || m.owner_id == current_user.id
+        end
     end
 
     def new
@@ -14,7 +17,8 @@ class ListsController < ApplicationController
 
     def create
         @list = List.new(list_params)
-        if @list.save
+        @list.owner_id = current_user.id
+        if @list.save!
             render json: @list, status: :created
         else
             render json: @list.errors, status: :unprocessable_entity
@@ -37,8 +41,8 @@ class ListsController < ApplicationController
     end
 
     private
-    
+
     def list_params
-        params.require(:list).permit(:title, :category )
+        params.require(:list).permit(:title, :category, :owner_id)
     end
 end
