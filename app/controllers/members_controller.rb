@@ -9,10 +9,10 @@ before_action :set_list
 
 
     if @member.save
-      respond_to do |format|
-        format.turbo_stream # para atualizar o Turbo Frame
-        format.html { redirect_to @list, notice: "#{user.email} adicionado à lista!" }
-      end
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.replace("members_list", partial: "members/members", locals: { members: @list.members, list: @list }) }
+      format.html { redirect_to @list, notice: "Membro adicionado!" }
+    end
     else
       redirect_to @list, alert: @member.errors.full_messages.to_sentence
     end

@@ -1,19 +1,59 @@
-<h2><%= @list.title %></h2>
-
-<h3>Membros</h3>
-<%= turbo_frame_tag "members_list" do %>
-  <ul>
-    <% @list.members.each do |member| %>
-      <li><%= member.user.email %></li>
-    <% end %>
-  </ul>
-<% end %>
-
-<h3>Adicionar membro</h3>
-<%= turbo_frame_tag "new_member" do %>
-  <%= form_with url: list_members_path(@list), method: :post, data: { turbo_frame: "members_list" } do |f| %>
-    <%= f.label :email, "E-mail do membro" %>
-    <%= f.text_field :email, placeholder: "Digite o e-mail do usuário", required: true %>
-    <%= f.submit "Adicionar Membro" %>
+<div class="min-h-screen bg-gray-50 py-8">
+<div class="max-w-4xl mx-auto mt-8 px-4 sm:px-6 lg:px-8 space-y-6">
+  <!-- Cabeçalho da Lista -->
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+    <h1 class="text-3xl font-bold text-gray-800"><%= @list.title %></h1>
+  <%= turbo_frame_tag "pending_count" do %>
+    <span class="bg-blue-500 text-white text-sm px-3 py-1 rounded-full">
+      <%= @list.items.where(status: false).count %> Pendentes
+    </span>
   <% end %>
-<% end %>
+  </div>
+  <!-- Lista de Tarefas -->
+  <ul id="items_list" class="space-y-2">
+    <%= render @list.items %>
+  </ul>
+
+  <!-- Formulário para criar nova tarefa -->
+  <%= turbo_frame_tag "new_item" do %>
+    <%= form_with model: [@list, Item.new], data: { turbo_frame: "items_list" }, class: "flex gap-2 mt-4" do |f| %>
+      <%= f.text_field :name, placeholder: "Nova tarefa", required: true, class: "flex-1 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" %>
+      <%= f.submit "Adicionar", class: "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200" %>
+    <% end %>
+  <% end %>
+
+
+
+ <!-- Lista de Membros -->
+<div class="bg-white border rounded-lg shadow p-6 mt-6">
+  <h2 class="text-xl font-semibold mb-4">Membros da Lista</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <% @list.members.each do |member| %>
+      <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200 shadow-sm">
+        <!-- Avatar com iniciais do usuário -->
+        <div class="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
+          <%= member.user.email[0].upcase %>
+        </div>
+        <!-- Email do usuário -->
+        <span class="text-gray-800 font-medium truncate"><%= member.user.email %></span>
+        <!-- Badge se for o owner -->
+        <% if member.user == @list.owner %>
+          <span class="ml-auto bg-green-100 text-green-800 text-xs font-semibold px-2 py-0.5 rounded-full">Owner</span>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
+  <!-- Formulário para adicionar membros -->
+  <%= turbo_frame_tag "new_member" do %>
+    <%= form_with url: list_members_path(@list), method: :post, data: { turbo_frame: "members_list" }, class: "flex gap-2 mt-2" do |f| %>
+      <%= f.label :email, "E-mail do membro", class: "sr-only" %>
+      <%= f.text_field :email, placeholder: "Digite o e-mail do usuário", required: true, class: "flex-1 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500" %>
+      <%= f.submit "Adicionar", class: "bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors duration-200" %>
+    <% end %>
+  <% end %>
+
+</div>
+</div>
