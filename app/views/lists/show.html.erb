@@ -32,10 +32,10 @@
       <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200 shadow-sm">
         <!-- Avatar com iniciais do usuário -->
         <div class="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
-          <%= member.user.email[0].upcase %>
+          <%= member.user.name[0].upcase %>
         </div>
         <!-- Email do usuário -->
-        <span class="text-gray-800 font-medium truncate"><%= member.user.email %></span>
+        <span class="text-gray-800 font-medium truncate"><%= member.user.name %></span>
         <!-- Badge se for o owner -->
         <% if member.user == @list.owner %>
           <span class="ml-auto bg-green-100 text-green-800 text-xs font-semibold px-2 py-0.5 rounded-full">Owner</span>
