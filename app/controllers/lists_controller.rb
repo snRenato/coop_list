@@ -13,6 +13,7 @@ class ListsController < ApplicationController
 
     def show
         @list = List.find(params[:id])
+        authorize @list, :show?
     end
 
     def create
@@ -34,15 +35,25 @@ class ListsController < ApplicationController
         end
     end
 
-    def destroy
+   def destroy
         @list = List.find(params[:id])
+        authorize @list if defined?(Pundit)
         @list.destroy
-        head :no_content
+        respond_to do |format|
+            format.turbo_stream
+            format.html { redirect_to lists_path, notice: "Lista excluída com sucesso." }
+        end
     end
 
     private
 
     def list_params
         params.require(:list).permit(:title, :category, :owner_id)
+    end
+
+    def authorize_user!
+        unless @list.owner == current_user || @list.members.exists?(user: current_user)
+            redirect_to lists_path, alert: "Você não tem permissão para acessar esta lista."
+        end
     end
 end

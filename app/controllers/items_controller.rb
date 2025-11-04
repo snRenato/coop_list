@@ -77,8 +77,5 @@ class ItemsController < ApplicationController
 
   def authorize_manage_items!
     member = @list.members.find_by(user: current_user)
-    unless member&.can_manage_items? || @list.owner == current_user
-      redirect_to @list, alert: "Você não pode gerenciar items"
-    end
   end
 end

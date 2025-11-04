@@ -2,19 +2,31 @@ class MembersController < ApplicationController
 before_action :set_list
 
   def create
-    # Cria o membro automaticamente como accepted
-    email = params[:email].strip.downcase
-    user = User.find_by(email: email)
-    @member = @list.members.build(user: user, status: :accepted)
+    @list = List.find(params[:list_id])
+    user = User.find_by(email: params[:email])
 
+    if user
+      @member = @list.members.new(user: user)
+      @member.status = "accepted"  # ✅ força aceitação automática
 
-    if @member.save
-    respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.replace("members_list", partial: "members/members", locals: { members: @list.members, list: @list }) }
-      format.html { redirect_to @list, notice: "Membro adicionado!" }
-    end
+      if @member.save
+        redirect_to @list, notice: "Membro adicionado com sucesso!"
+      else
+        redirect_to @list, alert: "Não foi possível adicionar o membro."
+      end
     else
-      redirect_to @list, alert: @member.errors.full_messages.to_sentence
+      redirect_to @list, alert: "Usuário não encontrado."
+    end
+  end
+
+  def destroy
+    @member = @list.members.find(params[:id])
+
+    if @member.user == @list.owner
+      redirect_to @list, alert: "O dono da lista não pode ser removido."
+    else
+      @member.destroy
+      redirect_to @list, notice: "Membro removido com sucesso."
     end
   end
 
