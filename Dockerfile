@@ -40,6 +40,7 @@ RUN apt-get update -qq && \
 # Set the working directory to match the volume mount in docker-compose.yml
 WORKDIR /coop_list
 
+
 # --- Docker Caching Optimization ---
 # By copying dependency files first and running install, Docker caches these layers.
 

@@ -1,59 +1,62 @@
 class ListsController < ApplicationController
-    before_action :authenticate_user!
+  before_action :authenticate_user!
+  before_action :set_list, only: %i[show update destroy]
+  after_action :verify_authorized, except: :index
+  after_action :verify_policy_scoped, only: :index
 
-    def index
-        @lists = List.select do |m|
-            m.members.exists?(user_id: current_user.id) || m.owner_id == current_user.id
-        end
+  def index
+    # Usa o escopo do Pundit em vez de filtragem manual
+    @lists = policy_scope(List)
+  end
+
+  def show
+    authorize @list
+  end
+
+  def new
+    @list = List.new
+    authorize @list
+  end
+
+  def create
+    @list = List.new(list_params)
+    @list.owner = current_user
+    authorize @list
+
+    if @list.save
+      render json: @list, status: :created
+    else
+      render json: @list.errors, status: :unprocessable_entity
     end
+  end
 
-    def new
-        @list = List.new
+  def update
+    authorize @list
+
+    if @list.update(list_params)
+      render json: @list, status: :ok
+    else
+      render json: @list.errors, status: :unprocessable_entity
     end
+  end
 
-    def show
-        @list = List.find(params[:id])
-        authorize @list, :show?
+  def destroy
+    authorize @list
+    @list.destroy
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to lists_path, notice: "Lista excluída com sucesso." }
     end
+  end
 
-    def create
-        @list = List.new(list_params)
-        @list.owner_id = current_user.id
-        if @list.save!
-            render json: @list, status: :created
-        else
-            render json: @list.errors, status: :unprocessable_entity
-        end
-    end
+  private
 
-    def update
-        @list = List.find(params[:id])
-        if @list.update(list_params)
-            render json: @list
-        else
-            render json: @list.errors, status: :unprocessable_entity
-        end
-    end
+  def set_list
+    @list = List.find(params[:id])
+  end
 
-   def destroy
-        @list = List.find(params[:id])
-        authorize @list if defined?(Pundit)
-        @list.destroy
-        respond_to do |format|
-            format.turbo_stream
-            format.html { redirect_to lists_path, notice: "Lista excluída com sucesso." }
-        end
-    end
-
-    private
-
-    def list_params
-        params.require(:list).permit(:title, :category, :owner_id)
-    end
-
-    def authorize_user!
-        unless @list.owner == current_user || @list.members.exists?(user: current_user)
-            redirect_to lists_path, alert: "Você não tem permissão para acessar esta lista."
-        end
-    end
+  def list_params
+    params.require(:list).permit(:title)
+  end
 end

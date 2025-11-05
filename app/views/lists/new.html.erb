@@ -1,20 +1,49 @@
-<%= form_with(model: @list, local: true) do |form| %>
-    <% if @list.errors.any? %>
-        <div id="error_explanation">
-            <h2><%= pluralize(@list.errors.count, "error") %> prohibited this list from being saved:</h2>
-            <ul>
-                <% @list.errors.full_messages.each do |message| %>
-                    <li><%= message %></li>
-                <% end %>
-            </ul>
+<div class="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-8">
+  <div class="w-full max-w-md bg-white rounded-3xl shadow-xl p-8 sm:p-10 md:p-12 transition-all duration-300">
+    
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-900 mb-8">
+      Criar Nova Lista
+    </h1>
+
+    <%= form_with(model: @list, local: true, html: { class: "space-y-6" }) do |form| %>
+      
+      <% if @list.errors.any? %>
+        <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg">
+          <h2 class="font-semibold mb-2">
+            <%= pluralize(@list.errors.count, "erro") %> impediram o salvamento:
+          </h2>
+          <ul class="list-disc list-inside text-sm">
+            <% @list.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
         </div>
+      <% end %>
+
+      <!-- Campo Título -->
+      <div class="flex flex-col gap-4">
+        <%= form.label :title, "Título da lista", class: "text-sm font-medium text-gray-700" %>
+        <%= form.text_field :title, 
+            placeholder: "Ex: Lista de Compras",
+            class: "w-full border border-gray-300 rounded-2xl px-4 py-3 text-gray-800 placeholder-gray-400
+                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                   shadow-sm transition-all duration-200" %>
+      </div>
+
+      <!-- Botão Criar Lista -->
+      <div class="flex justify-center mt-6">
+        <%= form.submit "Criar Lista",
+            class: "w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold
+                   rounded-2xl shadow-lg transform hover:-translate-y-0.5 transition-all duration-200
+                   focus:outline-none focus:ring-4 focus:ring-blue-300" %>
+      </div>
+
     <% end %>
-    <div class="flex flex-col align-center justify-center items-center field gap-4">
-        <%= form.label :title %>
-        <%= form.text_field :title %>
-        <%= form.select :category, options_for_select(['Groceries', 'Tasks']) %>
-        <%= form.submit "Create List", class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" %>
+
+    <!-- Link Voltar -->
+    <div class="mt-6 text-center">
+      <%= link_to "← Voltar para Listas", lists_path, class: "text-sm text-blue-600 hover:text-blue-800 font-medium underline transition-colors duration-200" %>
     </div>
 
-    
-<% end %>
+  </div>
+</div>

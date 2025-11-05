@@ -1,34 +1,41 @@
-<div class="min-h-screen bg-gray-50 py-8">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gray-50 py-10 px-4">
+  <div class="max-w-6xl mx-auto">
 
-    <h1 class="text-3xl font-bold underline mb-6 text-center text-gray-800">Lists</h1>
+    <!-- Título -->
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-900 mb-10">
+      Listas
+    </h1>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Grid de listas -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       <% @lists.each do |list| %>
-        <div id="<%= dom_id(list) %>" class="bg-white rounded-lg shadow-lg border border-gray-200 p-5 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300">
+        <div id="<%= dom_id(list) %>" class="bg-white rounded-3xl shadow-xl border border-gray-200 p-6 flex flex-col justify-between hover:shadow-2xl transition-shadow duration-300">
           
-          <div class="mb-4">
-            <h2 class="text-xl font-semibold text-gray-800 mb-2">
+          <!-- Conteúdo do card -->
+          <div class="mb-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-2">
               <%= link_to list.title, list, class: "hover:text-blue-600 transition-colors duration-200" %>
             </h2>
             <p class="text-sm text-gray-500">Criada em <%= list.created_at.strftime("%d/%m/%Y") %></p>
           </div>
 
+          <!-- Ações -->
           <div class="flex justify-between mt-4">
-            <%= link_to 'Show', list, class: "inline-block px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200" %>
-           <%= button_to 'Excluir', list_path(list),
-      method: :delete,
-      data: { turbo_confirm: 'Tem certeza que deseja excluir esta lista e todos os itens e membros?' },
-      class: "inline-block px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors duration-200" %>
-
+            <%= link_to 'Visualizar', list, class: "inline-block px-4 py-2 bg-blue-600 text-white rounded-2xl shadow hover:bg-blue-700 hover:-translate-y-0.5 transition-all duration-200" %>
+            <%= button_to 'Excluir', list_path(list),
+                  method: :delete,
+                  data: { turbo_confirm: 'Tem certeza que deseja excluir esta lista e todos os itens e membros?' },
+                  class: "inline-block px-4 py-2 bg-red-500 text-white rounded-2xl shadow hover:bg-red-600 hover:-translate-y-0.5 transition-all duration-200" %>
           </div>
           
         </div>
       <% end %>
     </div>
 
-    <div class="mt-6 text-center">
-      <%= link_to 'New List', new_list_path, class: "px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-200" %>
+    <!-- Botão criar nova lista -->
+    <div class="mt-10 text-center">
+      <%= link_to 'Nova Lista', new_list_path, class: "px-6 py-3 bg-blue-600 text-white rounded-2xl shadow hover:bg-blue-700 hover:-translate-y-0.5 transition-all duration-200 font-semibold" %>
     </div>
+
   </div>
 </div>
