@@ -1,6 +1,0 @@
-<% if current_user %>
-  <% unread_count = current_user.notifications.unread.count %>
-  <span class="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs px-1">
-    <%= unread_count %>
-  </span>
-<% end %>

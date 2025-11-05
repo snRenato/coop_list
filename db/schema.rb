@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_04_155945) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_05_000323) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -24,7 +24,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_04_155945) do
   end
 
   create_table "lists", force: :cascade do |t|
-    t.integer "category"
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -40,18 +39,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_04_155945) do
     t.integer "status", null: false
     t.index ["list_id"], name: "index_members_on_list_id"
     t.index ["user_id"], name: "index_members_on_user_id"
-  end
-
-  create_table "notifications", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.string "message"
-    t.boolean "read"
-    t.string "notifiable_type", null: false
-    t.bigint "notifiable_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["notifiable_type", "notifiable_id"], name: "index_notifications_on_notifiable"
-    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -71,5 +58,4 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_04_155945) do
   add_foreign_key "lists", "users", column: "owner_id"
   add_foreign_key "members", "lists"
   add_foreign_key "members", "users"
-  add_foreign_key "notifications", "users"
 end
