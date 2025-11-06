@@ -1,4 +1,4 @@
-<nav class="bg-white dark:bg-gray-900 shadow-md transition-colors duration-300">
+<nav>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16 items-center">
 
@@ -21,32 +21,16 @@
           <%= link_to "Registrar", new_user_registration_path,
                 class: "px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white rounded-2xl shadow transition-all duration-200 font-semibold" %>
         <% end %>
-
-        <!-- Dark Mode Toggle -->
-        <button id="theme-toggle" class="ml-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200">
-          <svg id="theme-toggle-icon" class="h-6 w-6 text-yellow-500 dark:text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 2a.75.75 0 01.75.75V4a.75.75 0 01-1.5 0V2.75A.75.75 0 0110 2zm5.657 2.343a.75.75 0 011.06 1.06l-1.06 1.06a.75.75 0 11-1.06-1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75H16a.75.75 0 010-1.5h1.25A.75.75 0 0118 10zm-2.343 5.657a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 111.06-1.06l1.06 1.06zM10 16a.75.75 0 01.75.75V18a.75.75 0 01-1.5 0v-1.25A.75.75 0 0110 16zm-5.657-2.343a.75.75 0 01-1.06-1.06l1.06-1.06a.75.75 0 011.06 1.06l-1.06 1.06zM2 10a.75.75 0 01.75-.75H4a.75.75 0 010 1.5H2.75A.75.75 0 012 10zm2.343-5.657a.75.75 0 011.06-1.06l1.06 1.06a.75.75 0 11-1.06 1.06L4.343 4.343z"/>
-            <path d="M10 5a5 5 0 100 10 5 5 0 000-10z"/>
-          </svg>
-        </button>
       </div>
 
       <!-- Mobile menu button -->
       <div class="flex items-center sm:hidden space-x-2">
-        <!-- Dark Mode Toggle Mobile -->
-        <button id="theme-toggle-mobile" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200">
-          <svg id="theme-toggle-icon-mobile" class="h-6 w-6 text-yellow-500 dark:text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 5a5 5 0 100 10 5 5 0 000-10z"/>
-          </svg>
-        </button>
-
         <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
           <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
       </div>
-
     </div>
   </div>
 

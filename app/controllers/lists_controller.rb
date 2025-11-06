@@ -23,10 +23,15 @@ class ListsController < ApplicationController
     @list.owner = current_user
     authorize @list
 
-    if @list.save
-      render json: @list, status: :created
-    else
-      render json: @list.errors, status: :unprocessable_entity
+    respond_to do |format|
+      if @list.save
+        format.html { redirect_to lists_path, notice: "Lista criada com sucesso!" }
+        format.json { render json: @list, status: :created }
+        redirect_to @list
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @list.errors, status: :unprocessable_entity }
+      end
     end
   end
 
