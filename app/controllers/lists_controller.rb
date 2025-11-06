@@ -18,17 +18,24 @@ class ListsController < ApplicationController
     authorize @list
   end
 
-  def create
-    @list = List.new(list_params)
-    @list.owner = current_user
-    authorize @list
+def create
+  @list = List.new(list_params)
+  @list.owner = current_user
+  authorize @list
 
-    if @list.save
-      render json: @list, status: :created
-    else
-      render json: @list.errors, status: :unprocessable_entity
+  if @list.save
+    respond_to do |format|
+      format.html { redirect_to lists_path, notice: "Lista criada com sucesso!" }
+      format.json { render json: @list, status: :created }
+    end
+  else
+    respond_to do |format|
+      format.html { render :new, status: :unprocessable_entity }
+      format.json { render json: @list.errors, status: :unprocessable_entity }
     end
   end
+end
+
 
   def update
     authorize @list

@@ -1,62 +1,81 @@
-# === Etapa 1: Build da aplicação ===
-FROM ruby:3.4.7-alpine AS build
+# =============================
+# Stage 1: Build
+# =============================
+ARG RUBY_VERSION=3.4.7
+FROM ruby:$RUBY_VERSION-slim AS builder
 
-# Instala dependências do sistema necessárias para gems, Node, Yarn, Postgres
-RUN apk add --no-cache \
-    build-base \
-    git \
-    nodejs \
-    yarn \
-    postgresql-dev \
-    bash \
-    tzdata \
-    imagemagick \
-    libxml2-dev \
-    libxslt-dev \
-    yaml-dev \
-    pkgconfig \
-    curl
+# --- Build-time args ---
+ARG RAILS_MASTER_KEY
 
-# Define diretório de trabalho
-WORKDIR /app
-
-# Copia Gemfile e Gemfile.lock para cache de gems
-COPY Gemfile Gemfile.lock ./
-
-# Instala gems
-RUN bundle config set --local deployment 'true' \
-    && bundle install --jobs 4 --retry 3
-
-# Copia o restante do código
-COPY . .
-
-# Instala pacotes JS (Tailwind, Hotwire)
-RUN yarn install --check-files
-
-# Precompila assets para produção
-RUN RAILS_ENV=production SECRET_KEY_BASE=1 ./bin/rails assets:precompile
-
-# Limpa caches desnecessários
-RUN rm -rf node_modules tmp/cache log/*
-
-# === Etapa 2: Imagem final leve ===
-FROM ruby:3.4.7-alpine
-
-WORKDIR /app
-
-# Copia gems e código da etapa build
-COPY --from=build /usr/local/bundle /usr/local/bundle
-COPY --from=build /app /app
-
-# Variáveis de ambiente essenciais
-ENV RAILS_ENV=production \
-    RACK_ENV=production \
-    PORT=3000 \
+# --- Environment ---
+ENV DEBIAN_FRONTEND=noninteractive \
     BUNDLE_PATH=/usr/local/bundle \
+    LANG=C.UTF-8 \
     PATH="/usr/local/bundle/bin:${PATH}"
 
-# Expondo a porta padrão
+# --- Install dependencies for building gems and assets ---
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+        build-essential \
+        git \
+        libpq-dev \
+        nodejs \
+        npm \
+        libyaml-dev \
+        pkg-config \
+        curl \
+        gnupg \
+        ca-certificates && \
+    npm install -g yarn && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
+
+# --- Working directory ---
+WORKDIR /coop_list
+
+# --- Install gems ---
+COPY Gemfile Gemfile.lock ./
+RUN gem install bundler && bundle install --without development test
+
+# --- Copy source code ---
+COPY . .
+
+# --- Install JS dependencies ---
+RUN yarn install --check-files
+
+# --- Precompile assets (DB dummy para não quebrar) ---
+ENV POSTGRES_HOST=dummy \
+    POSTGRES_USER=dummy \
+    POSTGRES_PASSWORD=dummy \
+    POSTGRES_DB=dummy \
+    SECRET_KEY_BASE=1 \
+    RAILS_ENV=production
+RUN bundle exec rails assets:precompile
+
+# =============================
+# Stage 2: Production image
+# =============================
+FROM ruby:$RUBY_VERSION-slim AS production
+
+# --- Environment ---
+ENV RAILS_ENV=production \
+    BUNDLE_PATH=/usr/local/bundle \
+    LANG=C.UTF-8 \
+    PATH="/usr/local/bundle/bin:${PATH}"
+
+WORKDIR /coop_list
+
+# --- Copy gems and assets from builder ---
+COPY --from=builder /usr/local/bundle /usr/local/bundle
+COPY --from=builder /coop_list /coop_list
+
+# --- Install runtime dependencies only ---
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y libpq-dev nodejs npm && \
+    npm install -g yarn && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
+
+# --- Expose Rails port ---
 EXPOSE 3000
 
-# Comando para iniciar a aplicação
-CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
+# --- Start server ---
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
