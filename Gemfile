@@ -56,12 +56,21 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+  gem "rspec-rails", "~> 8.0.0"
+  gem "factory_bot_rails"
+  gem "shoulda-matchers", "~> 6.4"
+  gem "pundit-matchers"
+  gem "rails-controller-testing"
 end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  gem "rspec-rails", "~> 8.0.0"
+  gem "shoulda-matchers", "~> 6.4"
+  gem "pundit-matchers"
+  gem "rails-controller-testing"
 end
 
 gem "tailwindcss-rails", "~> 4.3"

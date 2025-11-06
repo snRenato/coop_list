@@ -3,7 +3,7 @@ class List < ApplicationRecord
   has_many :members, dependent: :destroy
   has_many :users, through: :members
   has_many :items, dependent: :destroy
-
+  validates :title, presence: true
 
   private
 
