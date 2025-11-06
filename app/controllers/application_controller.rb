@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   include Pundit::Authorization
+  # Isso captura o erro e retorna 403 em vez de redirecionar
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   allow_browser versions: :modern
   before_action :configure_permitted_parameters, if: :devise_controller?
@@ -9,8 +11,13 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
   def user_not_authorized
-    redirect_to(request.referer || root_path, alert: "Você não tem permissão para acessar esta página.")
+    respond_to do |format|
+      format.html { head :forbidden }
+      format.turbo_stream { head :forbidden }
+      format.json { head :forbidden }
+    end
   end
 
   protected

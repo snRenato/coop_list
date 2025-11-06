@@ -11,7 +11,7 @@ class ListPolicy < ApplicationPolicy
   end
 
   def show?
-    owner? || member?
+  user.present? && (owner? || member?)
   end
 
   def create?
@@ -19,11 +19,11 @@ class ListPolicy < ApplicationPolicy
   end
 
   def update?
-    owner? || member?
+    user.present? && (owner? || member?)
   end
 
   def destroy?
-    owner?
+    user.present? && owner?
   end
 
   private
@@ -36,11 +36,12 @@ class ListPolicy < ApplicationPolicy
     list.members.exists?(user_id: user.id)
   end
 
-  class Scope < Scope
-    def resolve
-      scope.joins("LEFT JOIN members ON members.list_id = lists.id")
-           .where("lists.owner_id = ? OR members.user_id = ?", user.id, user.id)
-           .distinct
-    end
+class Scope < Scope
+  def resolve
+    return scope.none unless user
+    scope.joins("LEFT JOIN members ON members.list_id = lists.id")
+         .where("lists.owner_id = ? OR members.user_id = ?", user.id, user.id)
+         .distinct
   end
+end
 end
