@@ -19,7 +19,7 @@ class ListPolicy < ApplicationPolicy
   end
 
   def update?
-    user.present? && (owner? || member?)
+    user.present? && (owner? || member?) 
   end
 
   def destroy?
