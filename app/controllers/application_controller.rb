@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+   before_action :set_locale
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   include Pundit::Authorization
   # Isso captura o erro e retorna 403 em vez de redirecionar
@@ -19,6 +20,10 @@ class ApplicationController < ActionController::Base
       format.json { head :forbidden }
     end
   end
+
+    def set_locale
+      I18n.locale = :'pt-BR'
+    end
 
   protected
 

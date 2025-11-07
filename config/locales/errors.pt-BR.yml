@@ -1,0 +1,22 @@
+pt-BR:
+  activerecord:
+    models:
+      user: "Usuário"
+    attributes:
+      user:
+        email: "E-mail"
+        password: "Senha"
+        password_confirmation: "Confirmação de senha"
+        name: "Nome"
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      blank: "não pode ficar em branco"
+      taken: "já está em uso"
+      invalid: "não é válido"
+      too_short: "é muito curto (mínimo: %{count} caracteres)"
+      too_long: "é muito longo (máximo: %{count} caracteres)"
+      confirmation: "não coincide com %{attribute}"
+      not_saved:
+        one: "1 erro impediu este(a) %{resource} de ser salvo(a):"
+        other: "%{count} erros impediram este(a) %{resource} de ser salvo(a):"
