@@ -52,19 +52,30 @@
     </div>
   </section>
 
-  <!-- About Section -->
-  <section class="py-20 px-4 sm:px-6 lg:px-8 bg-[rgb(var(--bg))] border-t border-[rgb(var(--color-border))] transition-theme">
-    <div class="max-w-4xl mx-auto text-center">
-      <h2 class="text-3xl sm:text-4xl font-extrabold text-[rgb(var(--text))] mb-6">Sobre a Coop List</h2>
-      <p class="text-[rgb(var(--muted))] text-lg sm:text-xl mb-6">
-        Coop List é uma aplicação web feita para você criar, gerenciar e compartilhar listas de tarefas com sua equipe.
-        Ideal para projetos pessoais, trabalhos em grupo ou para organizar suas atividades do dia a dia.
-      </p>
-      <%= link_to "Comece agora",
+ <section class="py-20 px-4 sm:px-6 lg:px-8 
+                bg-white dark:bg-gray-800 
+                border-t border-gray-200 dark:border-gray-700 
+                transition-colors duration-200">
+  
+  <div class="max-w-4xl mx-auto text-center">
+    
+    <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mb-6">
+      Sobre a Coop List
+    </h2>
+    
+    <p class="text-gray-600 dark:text-gray-300 text-lg sm:text-xl mb-6">
+      Coop List é uma aplicação web feita para você criar, gerenciar e compartilhar listas de tarefas com sua equipe.
+      Ideal para projetos pessoais, trabalhos em grupo ou para organizar suas atividades do dia a dia.
+    </p>
+    
+    <%= link_to "Comece agora",
           new_list_path,
-          class: "px-6 py-3 rounded-2xl font-semibold shadow transition-theme bg-[rgb(var(--primary))] hover:bg-[rgb(var(--primary-hover))] text-white hover:-translate-y-0.5 transition-all duration-200" %>
-    </div>
-  </section>
+          class: "px-6 py-3 rounded-2xl font-semibold shadow text-white 
+                  bg-green-600 hover:bg-green-700 
+                  dark:bg-green-500 dark:hover:bg-green-600 
+                  hover:-translate-y-0.5 transition-all duration-200" %>
+  </div>
+</section>
 
   <!-- Footer -->
   <footer class="bg-[rgb(var(--bg))] py-6 mt-auto border-t border-[rgb(var(--color-border))] text-[rgb(var(--muted))] transition-theme">

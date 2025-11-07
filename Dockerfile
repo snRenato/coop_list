@@ -14,7 +14,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PATH="/usr/local/bundle/bin:${PATH}"
 
 # --- Install dependencies for building gems and assets ---
-RUN apt-get update -qq && \
+# **** CORREÇÃO AQUI ****
+RUN apt-get update -qq && apt-get upgrade -y && \
     apt-get install --no-install-recommends -y \
         build-essential \
         git \
@@ -69,7 +70,8 @@ COPY --from=builder /usr/local/bundle /usr/local/bundle
 COPY --from=builder /coop_list /coop_list
 
 # --- Install runtime dependencies only ---
-RUN apt-get update -qq && \
+# **** CORREÇÃO AQUI ****
+RUN apt-get update -qq && apt-get upgrade -y && \
     apt-get install --no-install-recommends -y libpq-dev nodejs npm && \
     npm install -g yarn && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
