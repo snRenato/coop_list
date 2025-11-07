@@ -1,14 +1,24 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-8">
-  <div class="w-full max-w-md bg-white rounded-3xl shadow-xl p-8 sm:p-10 md:p-12 transition-all duration-300">
+<div class="min-h-screen flex items-center justify-center px-4 py-8">
+  
+  <div class="w-full max-w-md 
+       bg-white dark:bg-gray-800 
+       border border-gray-200 dark:border-gray-700 
+       rounded-3xl shadow-xl p-8 sm:p-10 md:p-12">
     
-    <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-900 mb-8">
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-center 
+               text-gray-900 dark:text-white mb-8">
       Criar Nova Lista
     </h1>
 
     <%= form_with(model: @list, local: true, html: { class: "space-y-6" }) do |form| %>
       
       <% if @list.errors.any? %>
-        <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg">
+        <div class="
+            bg-red-50 dark:bg-red-900/20 
+            border-l-4 border-red-500 dark:border-red-600 
+            text-red-700 dark:text-red-400 
+            p-4 rounded-lg">
+          
           <h2 class="font-semibold mb-2">
             <%= pluralize(@list.errors.count, "erro") %> impediram o salvamento:
           </h2>
@@ -20,30 +30,36 @@
         </div>
       <% end %>
 
-      <!-- Campo Título -->
-      <div class="flex flex-col gap-4">
-        <%= form.label :title, "Título da lista", class: "text-sm font-medium text-gray-700" %>
-        <%= form.text_field :title, 
-            placeholder: "Ex: Lista de Compras",
-            class: "w-full border border-gray-300 rounded-2xl px-4 py-3 text-gray-800 placeholder-gray-400
-                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                   shadow-sm transition-all duration-200" %>
+      <div class="flex flex-col gap-2"> <%= form.label :title, "Título da lista", class: "text-sm font-medium text-gray-700 dark:text-gray-200" %>
+        
+        <%= form.text_field :title,
+              placeholder: "Ex: Lista de Compras",
+              class: "w-full border rounded-2xl px-4 py-3 shadow-sm 
+                      bg-white dark:bg-gray-700 
+                      text-gray-900 dark:text-white 
+                      placeholder-gray-400 dark:placeholder-gray-500 
+                      border-gray-300 dark:border-gray-600 
+                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
+                      transition-all duration-200" %>
       </div>
 
-      <!-- Botão Criar Lista -->
-      <div class="flex justify-center mt-6">
-        <%= form.submit "Criar Lista",
-            class: "w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold
-                   rounded-2xl shadow-lg transform hover:-translate-y-0.5 transition-all duration-200
-                   focus:outline-none focus:ring-4 focus:ring-blue-300" %>
+      <div class="flex justify-center pt-2"> <%= form.submit "Criar Lista",
+              class: "px-6 py-3 rounded-2xl font-semibold shadow-lg text-white 
+                      bg-blue-600 hover:bg-blue-700 
+                      dark:bg-blue-500 dark:hover:bg-blue-600 
+                      transform hover:-translate-y-0.5 transition-all duration-200 
+                      focus:outline-none focus:ring-4 focus:ring-blue-500/40 dark:focus:ring-blue-400/40 
+                      w-full sm:w-auto" %>
       </div>
 
     <% end %>
 
-    <!-- Link Voltar -->
     <div class="mt-6 text-center">
-      <%= link_to "← Voltar para Listas", lists_path, class: "text-sm text-blue-600 hover:text-blue-800 font-medium underline transition-colors duration-200" %>
+      <%= link_to "← Voltar para Listas",
+            lists_path,
+            class: "text-sm text-blue-600 dark:text-blue-400 
+                    hover:text-blue-700 dark:hover:text-blue-300 
+                    font-medium underline transition-colors duration-200" %>
     </div>
-
   </div>
 </div>

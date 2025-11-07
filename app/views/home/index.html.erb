@@ -1,78 +1,74 @@
 <!-- app/views/home/index.html.erb -->
-<div class="min-h-screen bg-gray-50 flex flex-col">
+<div class="min-h-screen bg-[rgb(var(--bg))] text-[rgb(var(--text))] flex flex-col transition-theme">
 
   <!-- Hero Section -->
-  <section class="bg-gradient-to-r from-blue-50 to-blue-100 py-20 px-4 sm:px-6 lg:px-8">
+  <section class="bg-[rgb(var(--bg))] py-20 px-4 sm:px-6 lg:px-8 border-b border-[rgb(var(--color-border))]">
     <div class="max-w-7xl mx-auto text-center">
-      <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4">
+      <h1 class="text-4xl sm:text-5xl font-extrabold text-[rgb(var(--text))] mb-4 transition-theme">
         Coop List
       </h1>
-      <p class="text-lg sm:text-xl text-gray-700 mb-8">
+      <p class="text-lg sm:text-xl text-[rgb(var(--muted))] mb-8">
         Organize suas listas de forma colaborativa, simples e eficiente.
       </p>
       <div class="flex justify-center gap-4">
-        <%= link_to "Criar sua primeira lista", new_list_path, class: "px-6 py-3 bg-blue-600 text-white rounded-2xl shadow hover:bg-blue-700 hover:-translate-y-0.5 transition-all duration-200 font-semibold" %>
-        <%= link_to "Saiba Mais", "#features", class: "px-6 py-3 bg-white border border-blue-600 text-blue-600 rounded-2xl shadow hover:bg-blue-50 hover:-translate-y-0.5 transition-all duration-200 font-semibold" %>
+        <%= link_to "Criar sua primeira lista",
+      new_list_path,
+      class: "px-6 py-3 rounded-2xl font-semibold shadow 
+              text-white 
+              bg-blue-600 hover:bg-blue-700 
+              dark:bg-blue-500 dark:hover:bg-blue-600 
+              hover:-translate-y-0.5 transition-all duration-200" %>
+
+        <%= link_to "Saiba Mais",
+            "#features",
+            class: "px-6 py-3 rounded-2xl font-semibold shadow transition-theme bg-[rgb(var(--bg))] border border-[rgb(var(--primary))] text-[rgb(var(--primary))] hover:bg-[rgb(var(--primary))]/10 hover:-translate-y-0.5 transition-all duration-200" %>
       </div>
     </div>
   </section>
 
   <!-- Features Section -->
-  <section id="features" class="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+  <section id="features" class="py-20 px-4 sm:px-6 lg:px-8 bg-[rgb(var(--bg))] text-[rgb(var(--text))] transition-theme">
     <div class="max-w-7xl mx-auto text-center mb-16">
-      <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">Recursos Principais</h2>
-      <p class="mt-4 text-gray-700 text-lg sm:text-xl">Tudo que você precisa para gerenciar listas de tarefas colaborativas.</p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-[rgb(var(--text))]">Recursos Principais</h2>
+      <p class="mt-4 text-[rgb(var(--muted))] text-lg sm:text-xl">
+        Tudo que você precisa para gerenciar listas de tarefas colaborativas.
+      </p>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-      <!-- Card 1 -->
-      <div class="bg-white rounded-3xl shadow-xl border border-gray-200 p-6 transition-transform transform hover:-translate-y-1 duration-200">
-        <h3 class="text-xl font-semibold text-gray-900 mb-3">Listas Colaborativas</h3>
-        <p class="text-gray-700 text-sm">Adicione membros às suas listas e trabalhe em equipe de forma organizada e eficiente.</p>
-      </div>
-      <!-- Card 2 -->
-      <div class="bg-white rounded-3xl shadow-xl border border-gray-200 p-6 transition-transform transform hover:-translate-y-1 duration-200">
-        <h3 class="text-xl font-semibold text-gray-900 mb-3">Tarefas Pendentes</h3>
-        <p class="text-gray-700 text-sm">Visualize rapidamente tarefas pendentes e conclua-as com facilidade.</p>
-      </div>
-      <!-- Card 3 -->
-      <div class="bg-white rounded-3xl shadow-xl border border-gray-200 p-6 transition-transform transform hover:-translate-y-1 duration-200">
-        <h3 class="text-xl font-semibold text-gray-900 mb-3">Notificações Futuras</h3>
-        <p class="text-gray-700 text-sm">Receba alertas sobre suas listas (em futuras versões) para não perder prazos importantes.</p>
-      </div>
-      <!-- Card 4 -->
-      <div class="bg-white rounded-3xl shadow-xl border border-gray-200 p-6 transition-transform transform hover:-translate-y-1 duration-200">
-        <h3 class="text-xl font-semibold text-gray-900 mb-3">Interface Moderna</h3>
-        <p class="text-gray-700 text-sm">Design limpo, responsivo e intuitivo para dispositivos móveis e desktop.</p>
-      </div>
-      <!-- Card 5 -->
-      <div class="bg-white rounded-3xl shadow-xl border border-gray-200 p-6 transition-transform transform hover:-translate-y-1 duration-200">
-        <h3 class="text-xl font-semibold text-gray-900 mb-3">Segurança</h3>
-        <p class="text-gray-700 text-sm">Autenticação robusta e segura de usuários, garantindo proteção de dados e sua privacidade.</p>
-      </div>
-      <!-- Card 6 -->
-      <div class="bg-white rounded-3xl shadow-xl border border-gray-200 p-6 transition-transform transform hover:-translate-y-1 duration-200">
-        <h3 class="text-xl font-semibold text-gray-900 mb-3">Rápido e Leve</h3>
-        <p class="text-gray-700 text-sm">Aplicação otimizada para performance e responsividade em qualquer dispositivo.</p>
-      </div>
+      <% [
+        ["Listas Colaborativas", "Adicione membros às suas listas e trabalhe em equipe de forma organizada e eficiente."],
+        ["Tarefas Pendentes", "Visualize rapidamente tarefas pendentes e conclua-as com facilidade."],
+        ["Notificações Futuras", "Receba alertas sobre suas listas (em futuras versões) para não perder prazos importantes."],
+        ["Interface Moderna", "Design limpo, responsivo e intuitivo para dispositivos móveis e desktop."],
+        ["Segurança", "Autenticação robusta e segura de usuários, garantindo proteção de dados e sua privacidade."],
+        ["Rápido e Leve", "Aplicação otimizada para performance e responsividade em qualquer dispositivo."]
+      ].each do |title, desc| %>
+        <div class="card-theme border border-[rgb(var(--color-border))] rounded-3xl shadow-xl p-6 transition-transform transform hover:-translate-y-1 duration-200">
+          <h3 class="text-xl font-semibold text-[rgb(var(--text))] mb-3"><%= title %></h3>
+          <p class="text-[rgb(var(--muted))] text-sm"><%= desc %></p>
+        </div>
+      <% end %>
     </div>
   </section>
 
   <!-- About Section -->
-  <section class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+  <section class="py-20 px-4 sm:px-6 lg:px-8 bg-[rgb(var(--bg))] border-t border-[rgb(var(--color-border))] transition-theme">
     <div class="max-w-4xl mx-auto text-center">
-      <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6">Sobre a Coop List</h2>
-      <p class="text-gray-700 text-lg sm:text-xl mb-6">
-        Coop List é uma aplicação web feita para você criar, gerenciar e compartilhar listas de tarefas com sua equipe.  
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-[rgb(var(--text))] mb-6">Sobre a Coop List</h2>
+      <p class="text-[rgb(var(--muted))] text-lg sm:text-xl mb-6">
+        Coop List é uma aplicação web feita para você criar, gerenciar e compartilhar listas de tarefas com sua equipe.
         Ideal para projetos pessoais, trabalhos em grupo ou para organizar suas atividades do dia a dia.
       </p>
-      <%= link_to "Comece agora", new_list_path, class: "px-6 py-3 bg-blue-600 text-white rounded-2xl shadow hover:bg-blue-700 hover:-translate-y-0.5 transition-all duration-200 font-semibold" %>
+      <%= link_to "Comece agora",
+          new_list_path,
+          class: "px-6 py-3 rounded-2xl font-semibold shadow transition-theme bg-[rgb(var(--primary))] hover:bg-[rgb(var(--primary-hover))] text-white hover:-translate-y-0.5 transition-all duration-200" %>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="bg-gray-100 py-6 mt-auto">
-    <div class="max-w-7xl mx-auto text-center text-gray-700 text-sm">
+  <footer class="bg-[rgb(var(--bg))] py-6 mt-auto border-t border-[rgb(var(--color-border))] text-[rgb(var(--muted))] transition-theme">
+    <div class="max-w-7xl mx-auto text-center text-sm">
       &copy; <%= Time.now.year %> Coop List. Todos os direitos reservados.
     </div>
   </footer>

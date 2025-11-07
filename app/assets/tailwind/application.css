@@ -1,4 +1,11 @@
+/* app/assets/stylesheets/application.tailwind.css */
+
 @import "tailwindcss";
+@config "../../../config/tailwind.config.js";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* NÃO COLOQUE MAIS NADA AQUI. 
+  Deixe o Tailwind fazer o trabalho.
+*/
