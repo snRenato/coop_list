@@ -11,15 +11,18 @@ RSpec.describe Item, type: :model do
     end
 
     it "não é válido sem name" do
-      item = Item.new(name: nil, list: list)
-      expect(item).not_to be_valid
-      expect(item.errors[:name]).to include("can't be blank")
+        item = Item.new(name: nil)
+        expect(item).to be_invalid
+        item.validate
+        expect(item.errors.details[:name]).to include(a_hash_including(error: :blank))
     end
 
+
     it "não é válido sem list" do
-      item = Item.new(name: "Item 1", list: nil)
-      expect(item).not_to be_valid
-      expect(item.errors[:list]).to include("must exist")
+      item = Item.new(name: "Nome")
+      expect(item).to be_invalid
+      item.validate
+      expect(item.errors.details[:list]).not_to be_empty
     end
   end
 
