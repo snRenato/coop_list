@@ -1,62 +1,103 @@
 <%= turbo_stream_from @list %>
 
-<div class="min-h-screen bg-gray-50 py-10 px-4">
+<div class="min-h-screen py-10 px-4">
   <div class="max-w-4xl mx-auto mt-8 space-y-8">
 
-    <!-- Cabeçalho da Lista -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-      <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900"><%= @list.title %></h1>
+      
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">
+        <%= @list.title %>
+      </h1>
+      
       <%= turbo_frame_tag "pending_count" do %>
-        <span class="bg-orange-400 text-white text-sm px-3 py-1 rounded-full shadow">
+        <span class="bg-orange-400 dark:bg-orange-500 text-white text-sm px-3 py-1 rounded-full shadow">
           <%= @list.items.where(status: false).count %> Pendentes
         </span>
       <% end %>
     </div>
 
-    <!-- Lista de Tarefas -->
     <ul id="items_list" class="space-y-3">
       <%= render @list.items %>
     </ul>
 
-    <!-- Formulário para criar nova tarefa -->
     <%= turbo_frame_tag "new_item" do %>
       <%= form_with model: [@list, Item.new], data: { turbo_frame: "items_list" }, class: "flex gap-2 mt-4" do |f| %>
+        
         <%= f.text_field :name, placeholder: "Nova tarefa", required: true,
-            class: "flex-1 border border-gray-300 rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all duration-200" %>
+              class: "flex-1 border rounded-2xl px-4 py-2 shadow-sm transition-all duration-200
+                      border-gray-300 dark:border-gray-600
+                      bg-white dark:bg-gray-700
+                      text-gray-900 dark:text-white
+                      placeholder-gray-400 dark:placeholder-gray-500
+                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" %>
+        
         <%= f.submit "Adicionar",
-            class: "bg-green-600 text-white px-4 py-2 rounded-2xl shadow hover:bg-green-700 hover:-translate-y-0.5 transition-all duration-200" %>
+              class: "bg-green-600 hover:bg-green-700 
+                      dark:bg-green-500 dark:hover:bg-green-600
+                      text-white px-4 py-2 rounded-2xl shadow 
+                      hover:-translate-y-0.5 transition-all duration-200" %>
       <% end %>
     <% end %>
 
-    <!-- Lista de Membros -->
-    <div class="bg-white rounded-3xl shadow-xl border border-gray-200 p-6 mt-6">
-      <h2 class="text-xl font-semibold mb-6 text-gray-900">Membros da Lista</h2>
+    <div class="bg-white dark:bg-gray-800 
+                rounded-3xl shadow-xl 
+                border border-gray-200 dark:border-gray-700 
+                p-6 mt-6">
+      
+      <h2 class="text-xl font-semibold mb-6 text-gray-900 dark:text-white">
+        Membros da Lista
+      </h2>
 
-      <!-- Dono da lista -->
-      <div class="flex items-center gap-4 p-4 bg-yellow-50 rounded-2xl border border-yellow-200 shadow-sm mb-6">
+      <div class="flex items-center gap-4 p-4 
+                  bg-yellow-50 dark:bg-yellow-900/50 
+                  rounded-2xl border 
+                  border-yellow-200 dark:border-yellow-800 
+                  shadow-sm mb-6">
+        
         <div class="w-12 h-12 bg-yellow-500 text-white rounded-full flex items-center justify-center font-bold text-lg">
           <%= @list.owner.name[0].upcase %>
         </div>
-        <span class="text-gray-900 font-semibold"><%= @list.owner.name %></span>
-        <span class="ml-auto bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">👑 Dono</span>
+        
+        <span class="text-gray-900 dark:text-gray-900 font-semibold">
+          <%= @list.owner.name %>
+        </span>
+        
+        <span class="ml-auto 
+                     text-xs font-semibold px-3 py-1 rounded-full
+                     bg-yellow-100 text-yellow-800 
+                     dark:bg-yellow-300 dark:text-yellow-900
+                     ">
+          👑 Dono
+        </span>
       </div>
 
-      <!-- Demais membros -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <% @list.members.each do |member| %>
           <% next if member.user == @list.owner %>
 
-          <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 shadow-sm transition-all duration-200 relative">
+          <div class="flex items-center gap-3 p-4 
+                      bg-gray-50 dark:bg-gray-700 
+                      rounded-2xl 
+                      hover:bg-gray-100 dark:hover:bg-gray-600 
+                      shadow-sm transition-all duration-200 relative">
+            
             <div class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg">
               <%= member.user.name[0].upcase %>
             </div>
+            
             <div class="flex flex-col">
-              <span class="text-gray-900 font-medium truncate"><%= member.user.name %></span>
+              <span class="text-gray-900 dark:text-gray-100 font-medium truncate">
+                <%= member.user.name %>
+              </span>
             </div>
+            
             <%= button_to list_member_path(@list, member),
                   method: :delete,
                   data: { turbo_confirm: "Remover #{member.user.name} da lista?" },
-                  class: "absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors duration-150" do %>
+                  class: "absolute top-2 right-2 
+                          text-red-500 hover:text-red-700 
+                          dark:text-red-400 dark:hover:text-red-300 
+                          transition-colors duration-150" do %>
               ✖
             <% end %>
           </div>
@@ -64,14 +105,23 @@
       </div>
     </div>
 
-    <!-- Formulário para adicionar membros -->
     <%= turbo_frame_tag "new_member" do %>
       <%= form_with url: list_members_path(@list), method: :post, data: { turbo_frame: "members_list" }, class: "flex gap-2 mt-4" do |f| %>
         <%= f.label :email, "E-mail do membro", class: "sr-only" %>
+        
         <%= f.text_field :email, placeholder: "Digite o e-mail do usuário", required: true,
-            class: "flex-1 border border-gray-300 rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 shadow-sm transition-all duration-200" %>
+              class: "flex-1 border rounded-2xl px-4 py-2 shadow-sm transition-all duration-200
+                      border-gray-300 dark:border-gray-600 
+                      bg-white dark:bg-gray-700 
+                      text-gray-900 dark:text-white 
+                      placeholder-gray-400 dark:placeholder-gray-500 
+                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" %>
+        
         <%= f.submit "Adicionar",
-            class: "bg-green-600 text-white px-4 py-2 rounded-2xl shadow hover:bg-green-700 hover:-translate-y-0.5 transition-all duration-200" %>
+              class: "bg-green-600 hover:bg-green-700 
+                      dark:bg-green-500 dark:hover:bg-green-600 
+                      text-white px-4 py-2 rounded-2xl shadow 
+                      hover:-translate-y-0.5 transition-all duration-200" %>
       <% end %>
     <% end %>
 

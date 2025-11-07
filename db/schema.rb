@@ -27,7 +27,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_05_000323) do
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "owner_id"
+    t.bigint "owner_id", null: false
     t.index ["owner_id"], name: "index_lists_on_owner_id"
   end
 
@@ -36,9 +36,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_05_000323) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "status", null: false
+    t.integer "status"
     t.index ["list_id"], name: "index_members_on_list_id"
     t.index ["user_id"], name: "index_members_on_user_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "message"
+    t.boolean "read"
+    t.string "notifiable_type", null: false
+    t.bigint "notifiable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["notifiable_type", "notifiable_id"], name: "index_notifications_on_notifiable"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -58,4 +70,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_05_000323) do
   add_foreign_key "lists", "users", column: "owner_id"
   add_foreign_key "members", "lists"
   add_foreign_key "members", "users"
+  add_foreign_key "notifications", "users"
 end

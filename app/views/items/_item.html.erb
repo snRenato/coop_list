@@ -1,12 +1,17 @@
-<li id="item_<%= item.id %>" class="flex items-center justify-between p-3 border rounded-lg shadow hover:bg-gray-50 transition-colors duration-200
-  <%= 'opacity-50 line-through' if item.status %>">
-  
+<li id="item_<%= item.id %>" class="
+    flex items-center justify-between p-3 border rounded-lg shadow 
+    transition-all duration-200 
+    bg-white dark:bg-gray-800
+    border-gray-200 dark:border-gray-700
+    hover:bg-gray-50 dark:hover:bg-gray-700
+    <%= 'opacity-50 line-through' if item.status %>
+  ">
   <%= form_with model: [item.list, item], url: toggle_list_item_path(item.list, item), method: :patch, data: { turbo_frame: "items_list" }, class: "flex items-center gap-2 flex-1" do |f| %>
-    <%= f.check_box :status, checked: item.status, onchange: "this.form.submit();", class: "w-5 h-5" %>
+    <%= f.check_box :status, checked: item.status, onchange: "this.form.submit();", class: "w-5 h-5 text-blue-600 rounded" %>
     <span class="flex-1"><%= item.name %></span>
   <% end %>
-
-  <span class="text-sm font-semibold <%= item.status ? 'text-green-600' : 'text-gray-500' %>">
+  <span class="text-sm font-semibold 
+    <%= item.status ? 'text-green-600 dark:text-green-500' : 'text-gray-500 dark:text-gray-400' %>">
     <%= item.status ? "Concluído" : "Pendente" %>
   </span>
 </li>

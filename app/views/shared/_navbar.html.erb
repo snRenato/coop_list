@@ -1,13 +1,13 @@
-<nav>
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm shadow-sm" 
+     data-controller="theme mobile-menu">
+  
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16 items-center">
 
-      <!-- Logo -->
       <div class="flex-shrink-0 flex items-center">
         <%= link_to "Coop List", root_path, class: "text-2xl font-extrabold text-blue-600 dark:text-blue-400 transition-colors duration-300" %>
       </div>
 
-      <!-- Desktop Links -->
       <div class="hidden sm:flex sm:items-center sm:space-x-4">
         <%= link_to "Página Inicial", root_path, class: "text-gray-900 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200" %>
         <%= link_to "Listas", lists_path, class: "text-gray-900 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200" %>
@@ -21,21 +21,38 @@
           <%= link_to "Registrar", new_user_registration_path,
                 class: "px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white rounded-2xl shadow transition-all duration-200 font-semibold" %>
         <% end %>
+
+        <button type="button" data-action="click->theme#toggle" class="p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
+          <span class="sr-only">Alternar tema</span>
+          <svg class="h-6 w-6 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /> </svg>
+          <svg class="h-6 w-6 hidden dark:inline" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m-6.364-2.364l.707.707M19.071 19.071l.707.707M3 12h1m16 0h1M4.929 4.929l.707.707M17.657 17.657l.707.707M12 5.5A6.5 6.5 0 1018.5 12 6.507 6.507 0 0012 5.5z" /> </svg>
+        </button>
       </div>
 
-      <!-- Mobile menu button -->
       <div class="flex items-center sm:hidden space-x-2">
-        <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+        <button type="button" data-action="click->theme#toggle" class="p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
+          <span class="sr-only">Alternar tema</span>
+          <svg class="h-6 w-6 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /> </svg>
+          <svg class="h-6 w-6 hidden dark:inline" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m-6.364-2.364l.707.707M19.071 19.071l.707.707M3 12h1m16 0h1M4.929 4.929l.707.707M17.657 17.657l.707.707M12 5.5A6.5 6.5 0 1018.5 12 6.507 6.507 0 0012 5.5z" /> </svg>
+        </button>
+
+        <button id="mobile-menu-button" 
+                type="button" 
+                data-action="click->mobile-menu#toggle" 
+                class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
           <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
       </div>
+
     </div>
   </div>
 
-  <!-- Mobile Menu -->
-  <div id="mobile-menu" class="sm:hidden hidden px-2 pt-2 pb-3 space-y-1">
+  <div id="mobile-menu" 
+       data-mobile-menu-target="menu" 
+       class="sm:hidden hidden px-2 pt-2 pb-3 space-y-1">
+    
     <%= link_to "Página Inicial", root_path, class: "block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200" %>
     <%= link_to "Listas", lists_path, class: "block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200" %>
 
@@ -50,34 +67,4 @@
     <% end %>
   </div>
 
-  <!-- Toggle scripts -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const menuBtn = document.getElementById("mobile-menu-button");
-      const mobileMenu = document.getElementById("mobile-menu");
-      menuBtn.addEventListener("click", () => mobileMenu.classList.toggle("hidden"));
-
-      const themeToggle = document.getElementById("theme-toggle");
-      const themeToggleMobile = document.getElementById("theme-toggle-mobile");
-      const root = document.documentElement;
-
-      function toggleTheme() {
-        if (root.classList.contains("dark")) {
-          root.classList.remove("dark");
-          localStorage.setItem("theme", "light");
-        } else {
-          root.classList.add("dark");
-          localStorage.setItem("theme", "dark");
-        }
-      }
-
-      themeToggle.addEventListener("click", toggleTheme);
-      themeToggleMobile.addEventListener("click", toggleTheme);
-
-      // Mantém o tema salvo no localStorage
-      if (localStorage.getItem("theme") === "dark") {
-        root.classList.add("dark");
-      }
-    });
-  </script>
-</nav>
+  </nav>
