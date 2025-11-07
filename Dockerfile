@@ -14,7 +14,6 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PATH="/usr/local/bundle/bin:${PATH}"
 
 # --- Install dependencies for building gems and assets ---
-# **** CORREÇÃO AQUI ****
 RUN apt-get update -qq && apt-get upgrade -y && \
     apt-get install --no-install-recommends -y \
         build-essential \
@@ -35,7 +34,7 @@ WORKDIR /coop_list
 
 # --- Install gems ---
 COPY Gemfile Gemfile.lock ./
-RUN gem install bundler && bundle install --without development test
+RUN gem install bundler && bundle install
 
 # --- Copy source code ---
 COPY . .
@@ -71,8 +70,14 @@ COPY --from=builder /coop_list /coop_list
 
 # --- Install runtime dependencies only ---
 # **** CORREÇÃO AQUI ****
+# Adicionamos 'build-essential' para que o 'bundle install'
+# possa compilar gemas nativas (como 'bindex') dentro do contêiner.
 RUN apt-get update -qq && apt-get upgrade -y && \
-    apt-get install --no-install-recommends -y libpq-dev nodejs npm && \
+    apt-get install --no-install-recommends -y \
+        libpq-dev \
+        nodejs \
+        npm \
+        build-essential && \
     npm install -g yarn && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 
