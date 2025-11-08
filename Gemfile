@@ -3,7 +3,7 @@ source "https://rubygems.org"
 # ----------------------------------------
 # == CORE RAILS & WEB SERVER
 # ----------------------------------------
-gem "rails", "~> 8.0.3"
+gem "rails", "~> 8.1.1"
 
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
