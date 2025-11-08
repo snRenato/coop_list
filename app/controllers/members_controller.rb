@@ -1,8 +1,7 @@
 class MembersController < ApplicationController
-before_action :set_list
+  before_action :set_list
 
   def create
-    @list = List.find(params[:list_id])
     user = User.find_by(email: params[:email])
 
     if user
@@ -32,8 +31,9 @@ before_action :set_list
 
   private
 
+  # ✅ Alterado para funcionar com FriendlyId
   def set_list
-    @list = List.find(params[:list_id])
+    @list = List.friendly.find(params[:list_id])
   end
 
   def member_params
