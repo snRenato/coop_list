@@ -37,7 +37,7 @@ RSpec.describe List, type: :model do
 
       member = list.members.last
       expect(member.user).to eq(current_user)
-      expect(member.status).to eq(1)
+      expect(member.status).to eq("accepted")
     end
   end
 end

@@ -7,7 +7,7 @@ RSpec.describe ItemsController, type: :controller do
   let(:other_user) { create(:user) }
   let(:unauthorized_user) { create(:user) }
   let(:list) { create(:list, owner: user) }
-  let!(:member) { list.members.create!(user: other_user, status: "active") }
+  let!(:member) { list.members.create!(user: other_user, status: "accepted") }
   let!(:item) { create(:item, list: list, name: "Item Original", status: false) }
 
   # ⚡ Configuração global do Devise mapping

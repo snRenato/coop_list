@@ -7,7 +7,7 @@ RSpec.describe ListsController, type: :controller do
   let!(:member_list) { create(:list, owner: other_user) }
 
   before do
-    member_list.members.create(user: user, status: "active")
+    member_list.members.create(user: user, status: "accepted")
   end
 
   describe "GET #index" do
@@ -37,7 +37,6 @@ end
   describe "GET #show" do
     context "quando é dono" do
       before { sign_in user }
-
       it "permite visualizar a lista" do
         get :show, params: { id: list.id }
         expect(response).to have_http_status(:ok)

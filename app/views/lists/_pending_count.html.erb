@@ -1,4 +1,4 @@
-<!-- app/views/lists/_pending_count.html.erb -->
-<span class="bg-blue-500 text-white text-sm px-3 py-1 rounded-full">
+<span id="pending_count"
+      class="bg-orange-500 dark:bg-orange-500 text-white text-sm font-semibold px-3 py-1 rounded-full shadow transition-all">
   <%= list.items.where(status: false).count %> Pendentes
 </span>
