@@ -1,0 +1,18 @@
+<%= form_with model: [list, item],
+              data: { turbo_frame: "items_list" },
+              class: "flex gap-2 mt-4" do |f| %>
+
+  <%= f.text_field :name, placeholder: "Nova tarefa", required: true,
+        class: "flex-1 border rounded-2xl px-4 py-2 shadow-sm transition-all duration-200
+                border-gray-300 dark:border-gray-600
+                bg-white dark:bg-gray-700
+                text-gray-900 dark:text-white
+                placeholder-gray-400 dark:placeholder-gray-500
+                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" %>
+
+  <%= f.submit "Adicionar",
+        class: "bg-green-600 hover:bg-green-700 
+                dark:bg-green-500 dark:hover:bg-green-600
+                text-white px-4 py-2 rounded-2xl shadow 
+                hover:-translate-y-0.5 transition-all duration-200" %>
+<% end %>

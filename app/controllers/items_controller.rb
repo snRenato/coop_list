@@ -2,50 +2,40 @@ class ItemsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_list
   before_action :set_item, only: [ :update ]
-  before_action :authorize_manage_items!, only: [:new, :create, :update, :toggle]
+  before_action :authorize_manage_items!, only: [ :new, :create, :update, :toggle ]
 
   def new
     @item = Item.new
   end
 
-  def create
-    # set_list já deve ter sido chamado pelo before_action
-    @item = @list.items.build(item_params)
-    # autorização — se usar Pundit, substitua por `authorize @item` ou sua lógica
-    authorize_manage_items!
-    if @item.save
-      respond_to do |format|
-        # Resposta para Turbo Stream / frames (AJAX)
-        format.turbo_stream do
-          render turbo_stream: [
-            # adiciona o novo item ao final do container #items_list
-            turbo_stream.append("items_list", partial: "items/item", locals: { item: @item }),
-            # atualiza o contador pendentes
-            turbo_stream.replace("pending_count", partial: "lists/pending_count", locals: { list: @list })
-          ]
-        end
+def create
+  @item = @list.items.build(item_params)
 
-        # Fallback HTML (caso o navegador não use Turbo)
-        format.html { redirect_to @list, notice: "Item adicionado!" }
+  if @item.save
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.append("items_list", partial: "items/item", locals: { item: @item }),
+          turbo_stream.replace("pending_count", partial: "lists/pending_count", locals: { list: @list }),
+          turbo_stream.replace("new_item", partial: "items/form", locals: { list: @list, item: Item.new }) # limpa o form 👈
+        ]
       end
-    else
-      respond_to do |format|
-        format.turbo_stream do
-          # substitui o form por uma versão com erros (partial que deve existir)
-          render turbo_stream: turbo_stream.replace(
-            "new_item",
-            partial: "items/form",
-            locals: { list: @list, item: @item }
-          ), status: :unprocessable_entity
-        end
-
-        format.html do
-          flash[:alert] = @item.errors.full_messages.to_sentence
-          redirect_to @list
-        end
+      format.html { redirect_to @list, notice: "Item adicionado!" }
+    end
+  else
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "new_item",
+          partial: "items/form",
+          locals: { list: @list, item: @item }
+        ), status: :unprocessable_entity
       end
+      format.html { redirect_to @list, alert: @item.errors.full_messages.to_sentence }
     end
   end
+end
+
 
   def show
     @item = @list.items.find(params[:id])
@@ -97,15 +87,15 @@ class ItemsController < ApplicationController
     params.require(:item).permit(:name, :status)
   end
 
-  def authorize_manage_items!
-    # O dono da lista sempre pode
-    return if @list.owner == current_user
+def authorize_manage_items!
+  return if @list.owner == current_user
 
-    # Membros aceitos também podem
-    member = @list.members.find_by(user: current_user, status: "accepted")
-    return if member.present?
+  member = @list.members.find_by(user: current_user)
+  return if member&.accepted?
 
-    # Qualquer outro usuário é bloqueado
-    redirect_to root_path, alert: "Você não tem permissão para acessar essa lista."
+  respond_to do |format|
+    format.html { redirect_to root_path, alert: "Você não tem permissão para acessar essa lista." }
+    format.turbo_stream { head :forbidden }
   end
+end
 end

@@ -14,6 +14,8 @@ gem "puma", ">= 5.0"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+gem "friendly_id", "~> 5.5.0"
+
 # ----------------------------------------
 # == FRONTEND & ASSETS
 # ----------------------------------------

@@ -1,3 +1,5 @@
 <%= turbo_stream.append "members_list" do %>
-  <li><%= @member.user.email %></li>
+  <%= render partial: "lists/member", locals: { member: @member } %>
 <% end %>
+
+<%= turbo_stream.replace "new_member", partial: "lists/new_member", locals: { list: @list } %>
