@@ -90,7 +90,7 @@ group :development, :test do
   gem "pundit-matchers"
   gem "rails-controller-testing"
   gem "rspec-rails", "~> 8.0.0"
-  gem "shoulda-matchers", "~> 6.4"
+  gem "shoulda-matchers", "~> 7.0"
 end
 
 # ----------------------------------------
